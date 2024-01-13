@@ -5,11 +5,15 @@
 - Node.js >= v14.18.3
 
 ## Getting Started
-
-First, run the development server:
-
+First, install the dependency:
 ```bash
 npm i
+
+```
+
+Then, run the development server:
+
+```bash
 npm run dev
 
 ```
