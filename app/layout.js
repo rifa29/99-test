@@ -11,7 +11,7 @@ export default function RootLayout({ children, onViewChange }) {
   return (
     <html lang="en">
       <body className="bg-gray-50">
-        <main className="container bg-white">{children}</main>
+        <main className="bg-white">{children}</main>
       </body>
     </html>
   )

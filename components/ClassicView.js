@@ -1,13 +1,18 @@
-import Image from 'next/image'
-import { ArrowBigDown, ArrowBigUp, Expand, MessageSquare } from 'lucide-react'
+import { ArrowBigDown, ArrowBigUp, Expand, MessageSquare } from 'lucide-react';
+import moment from 'moment';
 
 export default function ClassicView({ content }) {
+  const momentDate = moment.unix(content.created);
+
+  const formattedDate = momentDate.format('MM DD YYYY');
+  const timeDifference = momentDate.fromNow();
+
   return (
     <div className='flex border-b border-gray-300'>
       <div className='bg-gray-100 flex w-10 justify-center'>
         <div>
           <ArrowBigUp className='w-5 h-5 cursor-pointer text-gray-500' />
-          <p className='text-center text-xs'>{content.vote}</p>
+          <p className='text-center text-xs'>{content.ups - content.downs}</p>
           <ArrowBigDown className='w-5 h-5 cursor-pointer text-gray-500' />
         </div>
       </div>
@@ -19,7 +24,7 @@ export default function ClassicView({ content }) {
             <div className='text-xs text-gray-500 pr-4 mr-4 border-r border-gray-400'>
               Posted By : <span className='text-gray-800'>{content.author}</span>
             </div>
-            <div className='text-xs text-gray-500'>{content.created}</div>
+            <div className='text-xs text-gray-500'>{timeDifference}</div>
           </div>
           <div className='flex'>
             <Expand className='w-4 h-4 mr-3 cursor-pointer text-gray-500' />

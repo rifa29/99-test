@@ -1,11 +1,25 @@
 'use client'
 
-import Image from 'next/image'
-import { LayoutPanelTop, LayoutList, List } from 'lucide-react'
+import { useState } from 'react';
+import Image from 'next/image';
+import { 
+  LayoutPanelTop,
+  LayoutList,
+  List,
+  Flame,
+  FilePlus2,
+  TrendingUp
+} from 'lucide-react';
+import useSubredditThread from '../hooks/useSubredditThread';
 
 export default function Header({ onViewChange }) {
+  const [selectedIcon, setSelectedIcon] = useState('classic')
+
+  const { handleSort } = useSubredditThread()
+  
   const handleViewToggle = (selectedView) => {
     onViewChange(selectedView);
+    setSelectedIcon(selectedView);
   };
 
   return (
@@ -30,22 +44,28 @@ export default function Header({ onViewChange }) {
           <div className='flex h-[53px] items-center'>
             <div className='flex h-[35px] items-center pr-5 mr-5 border-r border-gray-300'>
               <label className='mr-2'>View</label>
-              <LayoutPanelTop className='toggleButtonCard w-5 h-5 mr-2 cursor-pointer text-blue-800' />
+              <div onClick={() => handleViewToggle('card')}>
+                <LayoutPanelTop className={`w-5 h-5 mr-2 cursor-pointer ${selectedIcon === 'card' ? 'text-blue-800' : 'text-gray-300'}`} />
+                </div>
               <div onClick={() => handleViewToggle('classic')}>
-                <LayoutList
-                  className='toggleButtonClassic w-5 h-5 mr-2 cursor-pointer text-gray-300'
-                />
+                <LayoutList className={`w-5 h-5 mr-2 cursor-pointer ${selectedIcon === 'classic' ? 'text-blue-800' : 'text-gray-300'}`} />
               </div>
               <div onClick={() => handleViewToggle('compact')}>
-                <List
-                  className='w-5 h-5 mr-2 cursor-pointer text-gray-300'
-                />
+                <List className={`w-5 h-5 mr-2 cursor-pointer ${selectedIcon === 'compact' ? 'text-blue-800' : 'text-gray-300'}`} />
               </div>
             </div>
-            <div className='flex h-[35px] items-center'>
+            {/* <div className='flex h-[35px] items-center'>
               <label className='mr-2'>Sort</label>
-              
-            </div>
+              <button onClick={() => handleSort('hot')} className='text-sm flex border border-gray-300 py-1 px-2 items-center'>
+                <Flame className='w-4 h-4 mr-1'/> Hot
+              </button>
+              <button onClick={() => handleSort('new')} className='text-sm flex border border-gray-300 py-1 px-2 items-center'>
+                <FilePlus2 className='w-4 h-4 mr-1'/> New
+              </button>
+              <button onClick={() => handleSort('top')} className='text-sm flex border border-gray-300 py-1 px-2 items-center'>
+                <TrendingUp className='w-4 h-4 mr-1'/> Top
+              </button>
+            </div> */}
           </div>
         </div>
       </nav>

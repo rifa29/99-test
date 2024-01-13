@@ -4,21 +4,22 @@ export default function useSubredditThread() {
 
   const [view, setView] = useState('classic'); 
 
-  const BASE_REDIT_THREAD_URL = "https://www.reddit.com/r/StartledCats";
+  const BASE_REDIT_THREAD_URL = "https://www.reddit.com/r/holdmybeer";
 
   const [posts, setPosts] = useState([]);
 
-  const [after, setAfter] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [after, setAfter] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(()=>{
+  const [sort, setSort] = useState('new');
+
+  useEffect(() => {
     (async () => {
       try {
-        const rawResults = await fetch(`${BASE_REDIT_THREAD_URL}/.json`);
+        const rawResults = await fetch(`${BASE_REDIT_THREAD_URL}/${sort}.json?after=${after}&limit=15`);
         const jsonResults = await rawResults.json();
         setPosts([...posts, ...jsonResults.data.children.map(obj => obj.data)])
         setAfter(jsonResults.data.after)
-        console.log(jsonResults.data.after, 'AFTER')
         setIsLoading(false)
       } catch(err) {
         console.log(err)
@@ -26,6 +27,22 @@ export default function useSubredditThread() {
     })(
     );
   },[isLoading])
+
+  useEffect(()=>{
+    setPosts([]);
+    
+    try {
+      const fetchResults = async () => {
+        const rawResults = await fetch(`${BASE_REDIT_THREAD_URL}/${sort}.json?limit=15`);
+        const jsonResults = await rawResults.json();
+        setPosts(jsonResults.data.children.map(obj => obj.data));
+      };
+  
+      fetchResults();
+    } catch (err) {
+      console.error(err);
+    }
+  },[sort])
 
   const handleScroll = (e) => {
     const scrollElem = document.querySelector('.scrollContainer')
@@ -38,10 +55,14 @@ export default function useSubredditThread() {
     return
   }
 
+  const handleSort = (sortBy) => {
+    setSort(sortBy)
+    console.log(sort, 'lalala')
+  }
+
   const handleViewChange = (selectedView) => {
     setView(selectedView);
-    console.log(selectedView)
   };
 
-  return { view, posts, onScroll:handleScroll, handleViewChange }
+  return { view, posts, onScroll:handleScroll, handleViewChange, handleSort, sort }
 }
